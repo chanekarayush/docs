@@ -1,0 +1,50 @@
+---
+title: Uninstalling Zen Browser
+description: How to uninstall Zen Browser Desktop App on Linux, MacOS and Windows
+---
+
+This Guide is designed to help you uninstall Zen Browser from your device.
+
+## Linux
+
+### Flatpak
+
+1. Close Zen completely.
+2. Check how it's installed with `flatpak list | grep zen`. The app ID is `app.zen_browser.zen`. It may be a user or a system install, which matters in step 3.
+3. Uninstall it and its data in one go:
+   ```
+   flatpak uninstall --delete-data app.zen_browser.zen
+   ```
+   This is the command used in a CachyOS forum thread to remove the Flatpak along with its data. If it was installed with `--user`, add `--user`. If you'd rather use a GUI, you can click Uninstall in GNOME Software.
+4. If you didn't use `--delete-data`, remove the app's data, which includes your profile (`~/.var/app/app.zen_browser.zen/zen/`):
+   rm -rf ~/.var/app/app.zen_browser.zen
+5. Optionally, remove unused runtimes: `flatpak uninstall --unused`
+6. If a Zen icon still shows in your app menu, log out and back in to refresh the menu cache.
+
+### Tarball install script
+Remove the following, then check `about:profiles` before deleting your profile directory (`~/.zen/` or `~/.config/zen/`):
+- `~/.tarball-installations/zen` (and `zen-twilight` if you used Twilight)
+- `~/.local/bin/zen`
+- `~/.local/share/applications/zen.desktop`
+- `~/.cache/zen`
+
+## macOS
+
+1. Quit Zen (Cmd+Q).
+2. Open Finder > Applications, drag **Zen** to the Trash, and empty the Trash.
+3. Remove the profile data, because dragging the app to the Trash doesn't do it. Standard uninstall tools often miss the profile folder, so a reinstall would load your old profile again. Use Finder > Go > Go to Folder and check these locations:
+   - `~/Library/Application Support/zen`. This is where Firefox-based browsers normally keep profiles. It's from my general knowledge rather than the search results, so confirm it against the path shown in `about:profiles`.
+   - `~/Library/Caches/Zen/Profiles` for the cache.
+4. Alternatively, a free app cleaner such as AppCleaner can find these leftover files. App cleaners sometimes miss profile data, so check the folders above afterwards.
+
+## Windows
+
+1. Close Zen, including any background process in Task Manager.
+2. Open Settings > Apps > Installed apps, find **Zen Browser**, click the three dots, and choose **Uninstall**. The Control Panel's Programs and Features works too. Zen registers in the Windows uninstall list as "Zen Browser (x64 en-US)".
+3. If you installed it with winget, you can instead run this in PowerShell or Terminal. The package ID is `Zen-Team.Zen-Browser`.
+   ```
+   winget uninstall Zen-Team.Zen-Browser
+   ```
+4. Remove leftover data. The cache and profile files live under `%LocalAppData%/Zen/Profiles`. Press Win+R, paste `%LocalAppData%\Zen`, and delete the folder. Also check `%AppData%\zen`, where Firefox-based browsers usually keep the main profile. That path comes from general knowledge, so confirm it against `about:profiles`.
+5. Restart if Windows reports that a file is in use.
+
